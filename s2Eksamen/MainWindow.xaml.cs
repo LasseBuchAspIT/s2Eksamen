@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DataAccess;
 
 namespace s2Eksamen
 {
@@ -23,6 +24,8 @@ namespace s2Eksamen
         public MainWindow()
         {
             InitializeComponent();
+            Repository repo = new();
+            repo.GetAllPitches();
         }
     }
 }

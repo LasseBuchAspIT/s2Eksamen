@@ -72,11 +72,32 @@ namespace DataAccess
             return bookings;
         }
 
-        public List<Pitch> pitches()
+        public List<Pitch> GetAllPitches()
         {
             List<Pitch> pitches = new();
 
+            SqlConnection connection = new(connectionString);
+            connection.Open();
+            string sql = "SELECT * FROM Pitches";
+            SqlCommand command = new(sql, connection);
+            SqlDataReader reader = command.ExecuteReader();
 
+            List<Booking> tempBookingList = GetAllBookings();
+
+            while (reader.Read())
+            {
+                int id = (int)reader[0];
+                int number = (int)reader[1];
+                Pitch pitch = new(id, number);
+                foreach(Booking b in tempBookingList)
+                {
+                    if(b.PitchId == id)
+                    {
+                        pitch.addBooking(b);
+                    }
+                }
+                pitches.Add(pitch);
+            }
 
             return pitches;
         }
