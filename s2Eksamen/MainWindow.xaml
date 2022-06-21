@@ -30,22 +30,79 @@
                 <TextBox Margin="100, 5, 0, 5" Grid.Row="1" x:Name="mailInput"/>
 
                 <Label Content="Fra: " Grid.Row="2"/>
-                <DatePicker Grid.Row="2" Margin="100, 5, 0, 5" Name="fromDatePicker"/>
+                <DatePicker Grid.Row="2" Margin="100, 5, 0, 5" Name="fromDatePicker" CalendarClosed="fromDatePicker_CalendarClosed"/>
 
                 <Label Content="Til: " Grid.Row="3"/>
-                <DatePicker Grid.Row="3" Margin="100, 5, 0, 5" Name="toDatePicker"/>
+                <DatePicker Grid.Row="3" Margin="100, 5, 0, 5" Name="toDatePicker" CalendarClosed="toDatePicker_CalendarClosed"/>
 
                 <Label Content="Plads: " Grid.Row="4" />
-                <ListBox Grid.Row="4" Margin="100, 5, 0, 5" Height="150" x:Name="pitchList"/>
+                <ListBox Grid.Row="4" Margin="100, 5, 0, 5" Height="150" x:Name="pitchList" SelectionChanged="pitchList_SelectionChanged"/>
 
-                <Button Grid.Row="5" Height="40" Margin="100, 5, 0, 5" x:Name="avaliablityBtn">Tjek ledighed</Button>
+                <Button Grid.Row="5" Height="40" Margin="100, 5, 0, 5" x:Name="avaliablityBtn" Click="avaliablityBtn_Click">Tjek ledighed</Button>
                 
-                <Button Grid.Row="6" Margin="5,0" VerticalAlignment="Bottom" x:Name="createBtn">Opret</Button>
+                <Button Grid.Row="6" Margin="5,0" VerticalAlignment="Bottom" x:Name="createBtn" IsEnabled="False" Click="createBtn_Click">Opret</Button>
             </Grid>
         </GroupBox>
 
         <GroupBox Header="Søg og redigér" Margin="15" Grid.Column="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.8*"/>
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Fra: "/>
+                    <DatePicker Margin="70, 5" x:Name="searchFromDatePicker"></DatePicker>
+                    
+                    <Label Content="Til: " Grid.Row="1"/>
+                    <DatePicker Margin="70, 5" Grid.Row="1" x:Name="searchToDatePicker"></DatePicker>
 
+                    <Button x:Name="searchBtn" Content="Søg " Grid.Row="2" Margin="70, 5" HorizontalAlignment="Right" Width="100" Click="searchBtn_Click"/>
+
+                    <Label Content="Ledige Pladser: " Grid.Row="3" />
+                    <ListBox Grid.Row="4" Margin="5" x:Name="avaliablePitchesList" SelectionMode="Extended" SelectionChanged="avaliablePitchesList_SelectionChanged"/>
+                </Grid>
+
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Label Content="Bookinger på pladsen"/>
+                    <DataGrid Grid.Row="1" x:Name="dGrid" AutoGenerateColumns="False" IsReadOnly="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Start}">
+                                <DataGridTextColumn.Header>
+                                    Fra
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding End}">
+                                <DataGridTextColumn.Header>
+                                    Til
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding BookingBooker.Name}">
+                                <DataGridTextColumn.Header>
+                                    Navn
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding BookingBooker.Mail}">
+                                <DataGridTextColumn.Header>
+                                    Mail
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+                
+            </Grid>
         </GroupBox>
     </Grid>
 </Window>

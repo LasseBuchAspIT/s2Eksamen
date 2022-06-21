@@ -102,6 +102,57 @@ namespace DataAccess
             return pitches;
         }
 
+        public List<Pitch> GetAllAvaliablePitches(DateTime intervalStart, DateTime intervalEnd)
+        {
+            List<Pitch> pitches = new();
+
+            foreach(Pitch pitch in GetAllPitches())
+            {
+                if (!pitch.IsBooked(intervalStart, intervalEnd))
+                {
+                    pitches.Add(pitch);
+                }
+            }
+
+            return pitches;
+        }
+
+        public void AddNewBooker(Booker booker)
+        {
+            SqlConnection connection = new(connectionString);
+            connection.Open();
+            string sql = $"INSERT INTO Bookers(Name, Mail) VALUES('{booker.Name}', '{booker.Mail}')";
+            SqlCommand command = new(sql, connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        public void AddNewBookingWithNewBooker(Booking booking, Booker booker, Pitch pitch)
+        {
+            int id = 1;
+
+            SqlConnection connection = new(connectionString);
+            connection.Open();
+            string sql = $"INSERT INTO Bookers(Name, Mail) VALUES('{booker.Name}', '{booker.Mail}')";
+            SqlCommand command1 = new(sql, connection);
+            command1.ExecuteNonQuery();
+
+            sql = $"SELECT MAX(BookerId) from Bookers";
+            command1 = new(sql, connection);
+            SqlDataReader dataReader = command1.ExecuteReader();
+            while (dataReader.Read())
+            {
+                id = (int)dataReader[0];
+            }
+            dataReader.Close();
+
+            sql = $"INSERT INTO Bookings(BookingStart, BookingEnd, PitchId, BookerId) VALUES('{booking.Start.ToString("yyyy-MM-dd")}', '{booking.End.ToString("yyyy-MM-dd")}', {pitch.id}, {id})";
+            command1 = new(sql, connection);
+            command1.ExecuteNonQuery();
+
+            connection.Close();
+        }
+
 
     }
 }
