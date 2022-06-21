@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DataAccess;
 using Entities;
+using Services;
 
 namespace s2Eksamen
 {
@@ -23,13 +24,16 @@ namespace s2Eksamen
     public partial class MainWindow : Window
     {
         Repository repo;
+        WeatherService weatherService;
+        bool isEditing = false;
         public MainWindow()
         {
             InitializeComponent();
             repo = new();
+            weatherService = new();
             avaliablePitchesList.ItemsSource = repo.GetAllPitches();
             pitchList.ItemsSource = repo.GetAllPitches();
-
+            weatherLbl.Content = weatherService.GetWeather();
             
         }
 
@@ -96,30 +100,89 @@ namespace s2Eksamen
 
         private void createBtn_Click(object sender, RoutedEventArgs e)
         {
-            Booker booker = new(1, nameInput.Text, mailInput.Text);
-            Pitch p = pitchList.SelectedItem as Pitch;
-            if(pitchList.SelectedItem != null)
+            if (!isEditing)
             {
-                Booking b = new(1, fromDatePicker.SelectedDate.Value, toDatePicker.SelectedDate.Value, booker, p.id);
-                MessageBox.Show($"{b.PitchId.ToString()}, {b.Id.ToString()}, {b.BookingBooker.Id.ToString()}");
-                repo.AddNewBookingWithNewBooker(b, booker, p);
+                Booker booker = new(1, nameInput.Text, mailInput.Text);
+                Pitch p = pitchList.SelectedItem as Pitch;
+                if (pitchList.SelectedItem != null)
+                {
+                    Booking b = new(1, fromDatePicker.SelectedDate.Value, toDatePicker.SelectedDate.Value, booker, p.id);
+                    repo.AddNewBookingWithNewBooker(b, booker, p);
+                    UpdateUI();
 
+                }
+                else
+                {
+                    MessageBox.Show("Vælg en plads");
+                }
             }
             else
             {
-                MessageBox.Show("Vælg en plads");
+                Booking b = (Booking)dGrid.SelectedItem;
+                b.Start = fromDatePicker.SelectedDate.Value;
+                b.End = toDatePicker.SelectedDate.Value;
+                b.BookingBooker.Name = nameInput.Text;
+                b.BookingBooker.Mail = mailInput.Text;
+                if(pitchList.SelectedItem != null)
+                {
+                    Pitch p = pitchList.SelectedItem as Pitch;
+                    b.PitchId = p.id;
+                }
+                repo.EditBooker(b.BookingBooker);
+                repo.EditBooking(b);
+                UpdateUI();
+                createBtn.Content = "Opret";
+                createBtn.IsEnabled = false;
+                isEditing = false;
             }
         }
 
         private void searchBtn_Click(object sender, RoutedEventArgs e)
         {
-            if(searchFromDatePicker != null && searchToDatePicker != null)
+            if(searchFromDatePicker.SelectedDate != null && searchToDatePicker.SelectedDate != null)
             {
+                avaliablePitchesList.ItemsSource = null;
                 avaliablePitchesList.ItemsSource = repo.GetAllAvaliablePitches(searchFromDatePicker.SelectedDate.Value, searchToDatePicker.SelectedDate.Value);
+                MessageBox.Show(repo.GetAllAvaliablePitches(searchFromDatePicker.SelectedDate.Value, searchToDatePicker.SelectedDate.Value).Count.ToString());
             }
             else
             {
                 MessageBox.Show("Vælg datoer");
+            }
+        }
+
+        private void dGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(dGrid.SelectedItem != null)
+            { 
+                Booking booking = (Booking)dGrid.SelectedItem;
+                nameInput.Text = booking.BookingBooker.Name;
+                mailInput.Text = booking.BookingBooker.Mail;
+                fromDatePicker.SelectedDate = booking.Start;
+                toDatePicker.SelectedDate = booking.End;
+                createBtn.Content = "Rediger";
+                isEditing = true;
+                foreach(Pitch p in pitchList.ItemsSource)
+                {
+                    if(p.id == booking.PitchId)
+                    {
+                        pitchList.SelectedItem = p;
+                    }
+                }
+                createBtn.IsEnabled = true;
+            }
+        }
+
+        private void DeleteBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if(dGrid.SelectedItem != null)
+            {
+                repo.DeleteBooking(dGrid.SelectedItem as Booking);
+                UpdateUI();
+            }
+            else
+            {
+                MessageBox.Show("Vælg en booking at slette");
             }
         }
     }

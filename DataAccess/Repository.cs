@@ -153,6 +153,40 @@ namespace DataAccess
             connection.Close();
         }
 
+        public void EditBooker(Booker booker)
+        {
+            SqlConnection connection = new(connectionString);
+            connection.Open();
+            string sql = $"UPDATE Bookers SET Name = '{booker.Name}', Mail = '{booker.Mail}' WHERE BookerId = {booker.Id}";
+            SqlCommand command = new(sql, connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        public void EditBooking(Booking booking)
+        {
+            SqlConnection connection = new(connectionString);
+            connection.Open();
+            string sql = $"UPDATE Bookings Set BookingStart = '{booking.Start.ToString("yyyy-MM-dd")}', BookingEnd = '{booking.End.ToString("yyyy-MM-dd")}', PitchId = {booking.PitchId}";
+            SqlCommand command = new(sql, connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
+        public void DeleteBooking(Booking booking)
+        {
+            SqlConnection connection = new(connectionString);
+            connection.Open();
+            string sql = $"DELETE FROM Bookings WHERE BookingsId = '{booking.Id}'";
+            SqlCommand command = new(sql, connection);
+            command.ExecuteNonQuery();
+
+            sql = $"DELETE FROM Bookers WHERE BookerId = '{booking.BookingBooker.Id}'";
+            command = new(sql, connection);
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+
 
     }
 }

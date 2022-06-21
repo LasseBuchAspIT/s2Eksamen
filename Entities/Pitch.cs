@@ -24,7 +24,7 @@
         {
             foreach(Booking b in bookings)
             {
-                if(intervalStart > b.Start && intervalStart < b.End || intervalEnd > b.Start && intervalEnd < b.End) 
+                if(intervalStart > b.Start && intervalStart < b.End || intervalEnd > b.Start && intervalEnd < b.End || intervalStart < b.Start && intervalEnd > b.End) 
                 {
                     return true;
                 }

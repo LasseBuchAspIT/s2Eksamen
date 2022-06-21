@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entiti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "UnitTest\Tests.csproj", "{4A9BC14B-F0ED-4891-988D-C95EC084BCBA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherService", "WeatherService\WeatherService.csproj", "{33F44236-5F8D-40BC-991F-854D96765926}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "WeatherService\Services.csproj", "{33F44236-5F8D-40BC-991F-854D96765926}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

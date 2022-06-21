@@ -21,6 +21,7 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
+                    <RowDefinition Height="auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Label Content="Name: "/>
@@ -39,8 +40,11 @@
                 <ListBox Grid.Row="4" Margin="100, 5, 0, 5" Height="150" x:Name="pitchList" SelectionChanged="pitchList_SelectionChanged"/>
 
                 <Button Grid.Row="5" Height="40" Margin="100, 5, 0, 5" x:Name="avaliablityBtn" Click="avaliablityBtn_Click">Tjek ledighed</Button>
+
+               
+                <Label x:Name="weatherLbl" Grid.Row="7"></Label>
                 
-                <Button Grid.Row="6" Margin="5,0" VerticalAlignment="Bottom" x:Name="createBtn" IsEnabled="False" Click="createBtn_Click">Opret</Button>
+                <Button Grid.Row="8" Margin="5,0" VerticalAlignment="Bottom" x:Name="createBtn" IsEnabled="False" Click="createBtn_Click">Opret</Button>
             </Grid>
         </GroupBox>
 
@@ -74,9 +78,10 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
                     <Label Content="Bookinger på pladsen"/>
-                    <DataGrid Grid.Row="1" x:Name="dGrid" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid Grid.Row="1" x:Name="dGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="dGrid_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Start}">
                                 <DataGridTextColumn.Header>
@@ -100,6 +105,7 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <Button Grid.Row="6" Height="40" Margin="100, 5, 0, 5" x:Name="DeleteBtn" Click="DeleteBtn_Click">Slet</Button>
                 </Grid>
                 
             </Grid>
