@@ -58,7 +58,7 @@ namespace DataAccess
 
                 foreach (Booker b in GetallBookers())
                 {
-                    if(b.Id == (int)reader[4])
+                    if (b.Id == (int)reader[4])
                     {
                         booker = b;
                         break;
@@ -89,9 +89,9 @@ namespace DataAccess
                 int id = (int)reader[0];
                 int number = (int)reader[1];
                 Pitch pitch = new(id, number);
-                foreach(Booking b in tempBookingList)
+                foreach (Booking b in tempBookingList)
                 {
-                    if(b.PitchId == id)
+                    if (b.PitchId == id)
                     {
                         pitch.addBooking(b);
                     }
@@ -106,7 +106,7 @@ namespace DataAccess
         {
             List<Pitch> pitches = new();
 
-            foreach(Pitch pitch in GetAllPitches())
+            foreach (Pitch pitch in GetAllPitches())
             {
                 if (!pitch.IsBooked(intervalStart, intervalEnd))
                 {
@@ -167,7 +167,7 @@ namespace DataAccess
         {
             SqlConnection connection = new(connectionString);
             connection.Open();
-            string sql = $"UPDATE Bookings Set BookingStart = '{booking.Start.ToString("yyyy-MM-dd")}', BookingEnd = '{booking.End.ToString("yyyy-MM-dd")}', PitchId = {booking.PitchId}";
+            string sql = $"UPDATE Bookings Set BookingStart = '{booking.Start.ToString("yyyy-MM-dd")}', BookingEnd = '{booking.End.ToString("yyyy-MM-dd")}', PitchId = {booking.PitchId} WHERE BookingsId = {booking.Id}";
             SqlCommand command = new(sql, connection);
             command.ExecuteNonQuery();
             connection.Close();

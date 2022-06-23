@@ -1,20 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using DataAccess;
+﻿using DataAccess;
 using Entities;
 using Services;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace s2Eksamen
 {
@@ -34,12 +22,12 @@ namespace s2Eksamen
             avaliablePitchesList.ItemsSource = repo.GetAllPitches();
             pitchList.ItemsSource = repo.GetAllPitches();
             weatherLbl.Content = weatherService.GetWeather();
-            
+
         }
 
         private void avaliablePitchesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(avaliablePitchesList.SelectedItem != null)
+            if (avaliablePitchesList.SelectedItem != null)
             {
                 Pitch p = (Pitch)avaliablePitchesList.SelectedItem;
                 dGrid.ItemsSource = p.bookings;
@@ -75,7 +63,7 @@ namespace s2Eksamen
             searchToDatePicker.SelectedDate = null;
             pitchList.ItemsSource = null;
             avaliablePitchesList.ItemsSource = null;
-            dGrid.ItemsSource=null;
+            dGrid.ItemsSource = null;
         }
 
         void UpdateUI()
@@ -123,7 +111,7 @@ namespace s2Eksamen
                 b.End = toDatePicker.SelectedDate.Value;
                 b.BookingBooker.Name = nameInput.Text;
                 b.BookingBooker.Mail = mailInput.Text;
-                if(pitchList.SelectedItem != null)
+                if (pitchList.SelectedItem != null)
                 {
                     Pitch p = pitchList.SelectedItem as Pitch;
                     b.PitchId = p.id;
@@ -139,11 +127,11 @@ namespace s2Eksamen
 
         private void searchBtn_Click(object sender, RoutedEventArgs e)
         {
-            if(searchFromDatePicker.SelectedDate != null && searchToDatePicker.SelectedDate != null)
+            if (searchFromDatePicker.SelectedDate != null && searchToDatePicker.SelectedDate != null)
             {
+                ClearUI();
                 avaliablePitchesList.ItemsSource = null;
                 avaliablePitchesList.ItemsSource = repo.GetAllAvaliablePitches(searchFromDatePicker.SelectedDate.Value, searchToDatePicker.SelectedDate.Value);
-                MessageBox.Show(repo.GetAllAvaliablePitches(searchFromDatePicker.SelectedDate.Value, searchToDatePicker.SelectedDate.Value).Count.ToString());
             }
             else
             {
@@ -153,8 +141,8 @@ namespace s2Eksamen
 
         private void dGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(dGrid.SelectedItem != null)
-            { 
+            if (dGrid.SelectedItem != null)
+            {
                 Booking booking = (Booking)dGrid.SelectedItem;
                 nameInput.Text = booking.BookingBooker.Name;
                 mailInput.Text = booking.BookingBooker.Mail;
@@ -162,9 +150,9 @@ namespace s2Eksamen
                 toDatePicker.SelectedDate = booking.End;
                 createBtn.Content = "Rediger";
                 isEditing = true;
-                foreach(Pitch p in pitchList.ItemsSource)
+                foreach (Pitch p in pitchList.ItemsSource)
                 {
-                    if(p.id == booking.PitchId)
+                    if (p.id == booking.PitchId)
                     {
                         pitchList.SelectedItem = p;
                     }
@@ -175,7 +163,7 @@ namespace s2Eksamen
 
         private void DeleteBtn_Click(object sender, RoutedEventArgs e)
         {
-            if(dGrid.SelectedItem != null)
+            if (dGrid.SelectedItem != null)
             {
                 repo.DeleteBooking(dGrid.SelectedItem as Booking);
                 UpdateUI();

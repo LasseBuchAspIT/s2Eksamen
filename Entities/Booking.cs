@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Entities
+﻿namespace Entities
 {
     public class Booking
     {
@@ -32,7 +26,7 @@ namespace Entities
             get => booker;
             set
             {
-                if(value == null)
+                if (value == null)
                 {
                     throw new ArgumentNullException("Booker må ikke være null!");
                 }

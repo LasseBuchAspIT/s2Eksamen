@@ -1,7 +1,4 @@
-﻿using Newtonsoft;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
 using System.Net;
 
 namespace Services
@@ -32,7 +29,7 @@ namespace Services
             string icon = rootData.list[0].weather[0].icon;
 
             // Return the weather:
-            return $"{desc}, {temperature - 273.15:f1} °C";
+            return $"{rootData.list[0].weather[0].description}, {rootData.list[0].main.temp - 273.15:f1} °C\n{rootData.list[8].weather[0].description}, {rootData.list[8].main.temp - 273.15:f1} °C\n{rootData.list[16].weather[0].description}, {rootData.list[16].main.temp - 273.15:f1} °C";
         }
     }
 
@@ -121,4 +118,3 @@ namespace Services
         public double gust { get; set; }
     }
 }
-                                 
